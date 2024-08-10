@@ -35,7 +35,7 @@ app.get("*", (req, res)=>{
   res.sendFile(path.resolve(__dirname, "clint", "dist", "index.html"))
 })
 
-app.listen(8000, () => {
+app.listen(process.env.PORT, () => {
   console.log("server is started");
 });
 
