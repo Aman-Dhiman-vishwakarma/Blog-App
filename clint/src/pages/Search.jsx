@@ -8,9 +8,10 @@ import PostCard from "../components/PostCard";
 const Search = () => {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
-    sort: "desc",
+    sort: "sort",
     category: "uncategorized",
   });
+
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ const Search = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
-    const sortFromUrl = urlParams.get("sort");
+    const sortFromUrl = urlParams.get("order");
     const categoryFromUrl = urlParams.get("category");
     if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
       setSidebarData({
@@ -71,13 +72,16 @@ const Search = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set("searchTerm",sidebarData.searchTerm);
-    urlParams.set("sort",sidebarData.sort);
-    urlParams.set("category",sidebarData.category);
-    const searchQuery = urlParams.toString();
-    neviget(`/search?${searchQuery}`)
+    if (sidebarData.searchTerm == "" && sidebarData.sort == "sort" && sidebarData.category == "uncategorized" ) return;
 
+    const urlParams = new URLSearchParams(location.search);
+    sidebarData.searchTerm !== "" ? urlParams.set("searchTerm",sidebarData.searchTerm) : urlParams.set("searchTerm","");
+    sidebarData.sort !== "sort" ? urlParams.set("order",sidebarData.sort) : urlParams.set("sort","");
+    sidebarData.category !== "uncategorized" ? urlParams.set("category",sidebarData.category) : urlParams.set("category","");
+    const searchQuery = urlParams.toString();
+    if (sidebarData.searchTerm !== "" || sidebarData.sort !== "" || sidebarData.category !== "" ) {
+      neviget(`/search?${searchQuery}`)
+    }
   }
 
   const handleShowMore = async () => {
@@ -125,6 +129,7 @@ const Search = () => {
             <div className='flex items-center gap-2'>
             <label className='font-semibold'>Sort:</label>
             <Select onChange={handleChange} value={sidebarData.sort} id='sort'>
+              <option value='sort'>sort</option>
               <option value='desc'>Latest</option>
               <option value='asc'>Oldest</option>
             </Select>

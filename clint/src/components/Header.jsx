@@ -71,9 +71,11 @@ const Header = () => {
           onChange={(e)=>{setSearchTerm(e.target.value)}}
         />
       </form>
+      <Link to="/search">
       <Button className="w-12 h-10 lg:hidden" color="gray">
         <AiOutlineSearch size="22px" />
       </Button>
+      </Link>
       <div className="flex gap-2 md:order-2">
         <Button className="w-12 h-10 hidden sm:inline" color="gray" onClick={()=>{dispatch(toaggleTheme())}}>
           {
